@@ -1,116 +1,97 @@
-# SupplyShield --- Supply Chain Analytics & Risk Intelligence
+# SupplyShield — Supply Chain Analytics & Risk Intelligence
 
-SupplyShield is an MCA portfolio prototype combining SQL analytics,
-Python risk reporting, a Power BI dashboard, and an experimental
-machine-learning workflow for supplier delivery and inventory risk.
+SupplyShield is a supply chain analytics prototype built using **Python, MySQL, Power BI, and machine learning**. It analyzes supplier delivery performance, identifies inventory risks, generates recommendations, and demonstrates a delivery-delay prediction workflow.
 
-> **Important limitation:** The current ML dataset and batch prediction
-> examples are synthetic. Model probabilities are demonstrations, not
-> calibrated real-world forecasts, and must not be used for operational
-> purchasing decisions.
+> **Important:** The current ML model uses synthetic training data. Its predictions are experimental and have not been validated on real-world delivery data.
 
-## Objectives
+## Dashboard Preview
 
--   Analyze supplier delivery performance and late orders.
--   Identify low-stock-coverage products and replenishment needs.
--   Calculate rule-based supplier and inventory risk indicators.
--   Display operational KPIs in Power BI.
--   Demonstrate a delivery-delay classification workflow.
--   Validate exported data and selected project scripts.
+The Power BI dashboard provides a consolidated view of supplier performance, inventory health, and delivery trends.
 
-## Technology stack
+**Dashboard file:** [`SupplyShield_Dashboard.pbix`](SupplyShield_Dashboard.pbix)
 
-  -----------------------------------------------------------------------
-  Technology                          Purpose
-  ----------------------------------- -----------------------------------
-  MySQL 8                             Suppliers, products, purchase
-                                      orders, and inventory tables
+Download the PBIX file from this repository and open it using Power BI Desktop.
 
-  Python                              Analytics, risk reports, model
-                                      workflow, and validation
+## Key Features
 
-  pandas / NumPy                      Data preparation and tabular
-                                      analysis
+- **Supplier analytics:** On-time delivery rates, late-order counts, and supplier comparisons.
+- **Inventory risk analysis:** Stock coverage, reorder thresholds, and low-cover product identification.
+- **Risk scoring:** Rule-based supplier risk ranking and inventory prioritization.
+- **Actionable recommendations:** Suggested follow-up actions based on observed risk indicators.
+- **Delivery-delay ML prototype:** A scikit-learn classification workflow trained on synthetic data.
+- **Batch predictions:** Export predicted outcomes and probabilities to CSV.
+- **Validation tools:** Scripts for data-quality, prediction-structure, and integration checks.
+- **Interactive Power BI dashboard:** KPI cards, charts, and supplier, category, and region slicers.
 
-  mysql-connector-python              Python-to-MySQL connection
+## Technology Stack
 
-  SQLAlchemy                          SQL toolkit used in the Python
-                                      environment, where applicable
-
-  scikit-learn                        Classification pipeline and model
-                                      evaluation
-
-  joblib                              Save and load the model pipeline
-
-  python-dotenv                       Read local settings from `.env`
-
-  Power BI Desktop                    Dashboard and prediction visual
-
-  Git / GitHub                        Version control and sharing
-  -----------------------------------------------------------------------
+| Technology | Purpose |
+|---|---|
+| Python | Analytics, risk calculations, and ML workflow |
+| MySQL | Relational database |
+| pandas and NumPy | Data processing |
+| scikit-learn | Classification and model evaluation |
+| joblib | Model serialization |
+| python-dotenv | Local environment configuration |
+| Power BI Desktop | Interactive dashboard |
+| Git and GitHub | Version control and project sharing |
 
 ## Architecture
 
-``` text
-MySQL (suppliers, products, purchase_orders, inventory)
-                 |
-                 v
-       Python analytics and risk rules
-                 |
-          CSV risk reports
-                 |
-                 v
-       Synthetic ML demonstration
-       | generate / validate data
-       | train / compare models
-       | save pipeline / predict
-                 |
-       batch prediction CSV
-                 |
-                 v
-           Power BI report
-       | operational KPIs
-       | supplier and inventory charts
-       | filters / demo prediction chart
+```text
+MySQL Database
+      |
+      v
+Python Analytics
+  |-- Supplier Performance
+  |-- Inventory Risk
+  |-- Risk Scoring
+  |-- Recommendations
+      |
+      +------> CSV Reports
+      |
+      v
+Synthetic ML Workflow
+  |-- Dataset Generation and Validation
+  |-- Model Training and Evaluation
+  |-- Batch Predictions
+      |
+      v
+Power BI Dashboard
 ```
 
 ## Database
 
-The local database is named `supplyshield`. Its main tables are:
+The MySQL database is named `supplyshield` and contains these main tables:
 
--   `suppliers`: supplier ID, name, region, and category.
--   `products`: product ID, name, category, and unit cost.
--   `purchase_orders`: order dates, expected and actual delivery dates,
-    quantity, supplier/product references, and status.
--   `inventory`: stock on hand, average daily demand, reorder point, and
-    last update.
+- `suppliers`
+- `products`
+- `purchase_orders`
+- `inventory`
 
-The current sample database contains 4 suppliers, 4 products, 10
-purchase orders, and 4 inventory records. These are sample records, not
-production data.
+The current operational sample contains 4 suppliers, 4 products, 10 purchase orders, and 4 inventory records. These are demonstration records, not production data.
 
-## Prerequisites
+## Setup
 
--   Windows and Python
--   MySQL Server and MySQL Workbench
--   Power BI Desktop
--   A project virtual environment such as `.venv`
+### Prerequisites
 
-Install dependencies in the activated environment:
+- Python
+- MySQL Server and MySQL Workbench
+- Power BI Desktop
 
-``` powershell
-python -m pip install --upgrade pip
-python -m pip install pandas numpy sqlalchemy mysql-connector-python python-dotenv scikit-learn joblib
+### Install dependencies
+
+Activate your virtual environment, then run:
+
+```bash
+python -m pip install -r requirements.txt
 ```
 
-If a `requirements.txt` file exists, prefer installing from it to keep
-versions consistent.
-
-## Environment configuration
+### Configure MySQL
 
 Create a local `.env` file in the project root:
 
-``` text
+```text
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_USER=root
@@ -118,24 +99,19 @@ DB_PASSWORD=YOUR_LOCAL_MYSQL_PASSWORD
 DB_NAME=supplyshield
 ```
 
-Replace the placeholder with your local MySQL password. Never commit
-`.env` or credentials to GitHub. Confirm `.env` is included in
-`.gitignore`.
+Replace the password placeholder with your local MySQL password. Never upload `.env` or credentials to GitHub.
 
-## Running the project
+### Run the project
 
-Run commands from the project root with the virtual environment
-activated.
+Test the database connection:
 
-### 1. Test the database connection
-
-``` powershell
+```bash
 python test_connection.py
 ```
 
-### 2. Run core analytics
+Run core analytics:
 
-``` powershell
+```bash
 python supplier_analytics.py
 python inventory_analytics.py
 python risk_report.py
@@ -144,163 +120,71 @@ python unified_risk_register.py
 python risk_recommendations.py
 ```
 
-These scripts produce terminal summaries and, depending on the script,
-CSV reports.
+Generate and validate synthetic training data:
 
-### 3. Prepare and validate the ML dataset
-
-``` powershell
+```bash
 python generate_synthetic_data.py
 python validate_synthetic_data.py
 python validate_ml_dataset.py
 ```
 
-`synthetic_ml_training_data.csv` is simulated data, not a record of
-actual deliveries.
+Train and evaluate the experimental model:
 
-### 4. Train and compare models
-
-``` powershell
+```bash
 python train_delivery_model.py
 python evaluate_model.py
 python improve_delivery_model.py
 python save_final_model.py
 ```
 
-Generated artifacts may include:
+Generate and validate batch predictions:
 
--   `supplyshield_delivery_model.joblib`
--   `supplyshield_model_metadata.json`
--   `model_evaluation_comparison.csv`
--   `improved_model_comparison.csv`
-
-Scores from synthetic data must not be presented as real-world accuracy.
-
-### 5. Generate and validate demo predictions
-
-``` powershell
-python predict_delivery.py
+```bash
 python batch_delivery_predictions.py
 python validate_batch_predictions.py
 ```
 
-The batch script creates `supplyshield_batch_predictions.csv`. Its
-`DEMO` order IDs and `SYNTHETIC_DEMO` label identify illustrative
-records, not actual purchase orders.
+Run the selected project checks:
 
-### 6. Run project checks
-
-``` powershell
-python test_delivery_model.py
-python integration_check.py
+```bash
 python run_supplyshield_checks.py
 ```
 
-A passing run confirms the selected checks completed. It does not prove
-predictive accuracy, security, production readiness, or business impact.
+## Power BI Dashboard
 
-## Power BI dashboard
+The report includes:
 
-The current report includes operational views such as:
+- Supplier and purchase-order KPIs
+- On-time delivery percentage and late-order counts
+- Inventory stock by product
+- Supplier late-delivery rates
+- Delivery volume trend
+- Supplier, category, and region slicers
+- A chart showing synthetic demo prediction probabilities
 
--   Supplier, purchase-order, completion, late-order, and
-    on-time-delivery KPIs
--   Inventory stock by product and low-cover product counts
--   Supplier late-delivery rate
--   Delivery volume trend
--   Supplier, category, and region slicers
--   A prediction chart based on `supplyshield_batch_predictions.csv`
+The dashboard's prediction visual uses `supplyshield_batch_predictions.csv`. Regenerate the file by running the batch prediction script, then refresh or re-import it in Power BI as required.
 
-To regenerate the demo prediction CSV:
+## Machine Learning Limitations
 
-``` powershell
-python batch_delivery_predictions.py
-```
+The delivery-delay model is an experimental demonstration trained on synthetic records. Its evaluation scores do not establish real-world predictive accuracy. The displayed probabilities are not calibrated business risk estimates.
 
-Then refresh or re-import the CSV in Power BI as needed. Keep synthetic
-predictions clearly labelled and separate from actual operational data.
-Do not join `DEMO001`-style IDs to real purchase-order IDs.
+A larger, representative historical dataset and more rigorous validation are needed before the model can support operational decisions.
 
-## Risk methodology
+## Testing
 
--   Inventory coverage is stock on hand divided by average daily demand.
--   Reorder status follows the configured stock-coverage and
-    reorder-point rules.
--   Supplier risk scores summarize the delivery history using rule-based
-    calculations.
--   The ML classifier predicts a simulated `was_late` target from the
-    input features.
+The project includes scripts to check synthetic-data validity, batch prediction structure, model interface behavior, and integration with MySQL. The selected automated checks have passed on the local development environment.
 
-Rule-based scores and ML probabilities are different measures and should
-not be compared directly. Thresholds and recommended actions require
-review against real business requirements before operational use.
+Passing these checks confirms the tested interfaces and data conditions; it does not establish production readiness or real-world model accuracy.
 
-## Current limitations
+## Future Improvements
 
--   The operational sample is small: 4 suppliers, 4 products, and 10
-    purchase orders.
--   ML labels are generated synthetically, so the model may learn
-    simulation patterns rather than real causes of delays.
--   Test scores do not establish real-world predictive performance.
--   Batch predictions are illustrative demo orders.
--   Authentication, API serving, production deployment, monitoring, and
-    comprehensive automated tests are not established as completed
-    features.
--   Verify Power BI refresh and relationships when moving the report to
-    another computer.
+- Obtain and validate representative historical supply-chain data.
+- Add comprehensive unit and integration tests.
+- Improve model validation and probability calibration.
+- Add a FastAPI service once data and prediction interfaces are stable.
+- Improve dashboard design and refresh documentation.
+- Plan deployment, monitoring, and access control.
 
-## Recommended next milestones
+## Portfolio Summary
 
-1.  Add a pinned `requirements.txt`.
-2.  Add unit tests for analytics and risk calculations.
-3.  Obtain a larger, representative, permissioned historical delivery
-    dataset.
-4.  Use leakage-safe validation and meaningful baselines.
-5.  Add FastAPI after the data and model interfaces are stable.
-6.  Polish Power BI formatting and document refresh steps.
-7.  Add deployment instructions and a short demo.
-
-## Suggested repository structure
-
-``` text
-SupplyShield/
-├── .env                         # Local only; never commit
-├── .gitignore
-├── README.md
-├── test_connection.py
-├── supplier_analytics.py
-├── inventory_analytics.py
-├── risk_report.py
-├── supplier_risk_scoring.py
-├── unified_risk_register.py
-├── risk_recommendations.py
-├── generate_synthetic_data.py
-├── validate_synthetic_data.py
-├── validate_ml_dataset.py
-├── train_delivery_model.py
-├── evaluate_model.py
-├── improve_delivery_model.py
-├── save_final_model.py
-├── predict_delivery.py
-├── test_delivery_model.py
-├── batch_delivery_predictions.py
-├── validate_batch_predictions.py
-├── integration_check.py
-├── run_supplyshield_checks.py
-├── *.csv                         # Generated reports / demo data
-├── *.joblib                      # Generated model artifact
-└── *.pbix                        # Power BI report, if stored here
-```
-
-This is a guide; include only files that actually exist in your
-repository.
-
-## Portfolio description
-
-**SupplyShield --- Supply Chain Analytics & Risk Intelligence:** Built a
-prototype combining MySQL, Python analytics, rule-based supplier and
-inventory risk scoring, a Power BI dashboard, and an experimental
-scikit-learn delivery-delay classifier. Added synthetic-data validation,
-model evaluation, prediction export, and repeatable integration checks.
-The ML component is documented as a demonstration pending validation on
-representative real-world data.
+SupplyShield demonstrates practical skills in SQL, Python analytics, inventory and supplier risk analysis, Power BI reporting, machine-learning experimentation, data validation, and Git-based project management.
