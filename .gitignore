@@ -1,0 +1,51 @@
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Generated ML artifacts
+*.joblib
+*.pkl
+
+# Generated reports and datasets
+data_quality_report.csv
+inventory_risk_prioritization.csv
+supplyshield_ml_dataset.csv
+synthetic_ml_training_data.csv
+supplyshield_batch_predictions.csv
+delivery_model_test_predictions.csv
+model_evaluation_comparison.csv
+improved_model_comparison.csv
+
+# Local editor settings
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Generated analytics reports
+data_quality_report.csv
+inventory_risk_analysis.csv
+inventory_risk_prioritization.csv
+risk_recommendations.csv
+supplier_delivery_analysis.csv
+supplier_risk_scoring.csv
+supplyshield_executive_summary.csv
+unified_risk_register.csv
+
+# Generated datasets and model outputs
+supplyshield_ml_dataset.csv
+synthetic_ml_training_data.csv
+supplyshield_batch_predictions.csv
+delivery_model_test_predictions.csv
+model_evaluation_comparison.csv
+improved_model_comparison.csv
+
+# Generated model metadata
+supplyshield_model_metadata.json

@@ -1,0 +1,7 @@
+pandas
+numpy
+mysql-connector-python
+SQLAlchemy
+python-dotenv
+scikit-learn
+joblib
